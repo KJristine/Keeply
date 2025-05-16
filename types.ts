@@ -33,8 +33,9 @@ export type TypoProps = {
   color?: string;
   fontWeight?: TextStyle["fontWeight"];
   children: any | null;
-  style?: TextStyle;
+  style?: TextStyle | TextStyle[];
   textProps?: TextProps;
+  numberOfLines?: number;
 };
 
 export type IconComponent = React.ComponentType<{

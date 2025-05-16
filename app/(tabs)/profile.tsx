@@ -1,14 +1,12 @@
-//working fine as intended already -- do not change pls
-
 import Typo from "@/components/Typo";
 import { db } from "@/config/firebase";
 import { colors } from "@/constants/theme";
 import { useAuth } from "@/context/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -21,6 +19,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import ImagePicker from 'react-native-image-crop-picker';
 
 export default function Profile() {
   const { user, logout } = useAuth();
@@ -32,6 +31,7 @@ export default function Profile() {
   const [isLoading, setIsLoading] = useState(false);
   const [fetchingData, setFetchingData] = useState(true);
   const router = useRouter();
+  const storage = getStorage();
 
   // Fetch user data on component mount
   useEffect(() => {
@@ -83,43 +83,69 @@ export default function Profile() {
     }
 
     try {
-      // Use the updated MediaType instead of deprecated MediaTypeOptions
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: type === "profile" ? [1, 1] : [16, 9],
-        quality: 0.7,
-      });
+      // Configure different options based on image type
+      const options = {
+        width: type === "profile" ? 500 : 1000,
+        height: type === "profile" ? 500 : 560,
+        cropping: true,
+        cropperCircleOverlay: type === "profile", // Circular crop for profile pics
+        mediaType: 'photo' as const,
+        compressImageQuality: 0.8,
+        compressImageMaxWidth: 1024,
+        compressImageMaxHeight: 1024,
+        includeBase64: false,
+        cropperToolbarTitle: type === "profile" ? "Crop Profile Photo" : "Crop Cover Photo",
+      };
 
-      if (!result.canceled && result.assets.length > 0) {
+      // Launch the image picker
+      const image = await ImagePicker.openPicker(options);
+      
+      if (image) {
         setIsLoading(true);
-        const localUri = result.assets[0].uri;
-
+        const localUri = image.path;
+        
         try {
-          // Update Firestore document directly with the local URI
+          // Convert URI to blob
+          const response = await fetch(localUri);
+          const blob = await response.blob();
+          
+          // Create a storage reference
+          const storageRef = ref(
+            storage, 
+            `userImages/${user.uid}/${type}_${Date.now()}`
+          );
+          
+          // Upload to Firebase Storage
+          const uploadResult = await uploadBytes(storageRef, blob);
+          
+          // Get the download URL
+          const downloadURL = await getDownloadURL(uploadResult.ref);
+          
+          // Update Firestore document with the cloud URL
           const userDocRef = doc(db, "users", user.uid);
           const updateField =
-            type === "profile"
-              ? { profileUrl: localUri }
-              : { coverUrl: localUri };
+            type === "profile" ? { profileUrl: downloadURL } : { coverUrl: downloadURL };
 
           await updateDoc(userDocRef, updateField);
 
           // Update local state
-          setter(localUri);
+          setter(downloadURL);
 
-          console.log("Updated user document with image URI");
+          console.log("Updated user document with cloud image URL");
           Alert.alert("Success", "Image updated successfully");
         } catch (error) {
-          console.error("Error updating image URI:", error);
-          Alert.alert("Error", "Failed to update image");
+          console.error("Error uploading image:", error);
+          Alert.alert("Error", "Failed to upload image");
         } finally {
           setIsLoading(false);
         }
       }
-    } catch (error) {
-      Alert.alert("Error", "Failed to pick image");
-      console.error(error);
+    } catch (error: unknown) {
+      // Don't show error when user cancels
+      if (error instanceof Error && error.message !== 'User cancelled image selection') {
+        Alert.alert("Error", "Failed to pick image");
+        console.error(error);
+      }
       setIsLoading(false);
     }
   };
@@ -312,6 +338,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.usualBackground,
+    paddingHorizontal: 16,
   },
   loadingContainer: {
     justifyContent: "center",

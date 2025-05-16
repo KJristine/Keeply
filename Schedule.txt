@@ -1,3 +1,5 @@
+//working fine as intended please do not change anything
+
 import Typo from "@/components/Typo";
 import { db } from "@/config/firebase";
 import { colors } from "@/constants/theme";
@@ -39,7 +41,7 @@ interface Schedule {
   time: string;
   date: string;
   userId: string;
-  createdAt: any;
+  createdAt: any; // Using 'any' for Firebase Timestamp
 }
 
 export default function ScheduleScreen() {
@@ -66,7 +68,6 @@ export default function ScheduleScreen() {
       selected?: boolean;
     };
   }
-
   const [markedDates, setMarkedDates] = useState<MarkedDates>({});
   const { user } = useAuth();
 
@@ -77,9 +78,10 @@ export default function ScheduleScreen() {
     year: "numeric",
   })} - ${today.toLocaleDateString(undefined, { weekday: "long" })}`;
 
-  //This will fetch schedules from the Firestore Database
+  // Fetch schedules from Firestore
   const fetchSchedules = async () => {
     if (!user) return;
+
     try {
       setIsLoading(true);
       const schedulesRef = collection(db, "schedules");
@@ -95,7 +97,7 @@ export default function ScheduleScreen() {
         const data = { id: doc.id, ...doc.data() } as Schedule;
         schedulesData.push(data);
 
-        //This will mark dates on calendar, the pink circle ones
+        // Mark dates on calendar
         if (data.date) {
           dates[data.date] = {
             marked: true,
@@ -412,7 +414,7 @@ export default function ScheduleScreen() {
       <View style={{ flex: 1 }}>
         {/* Header */}
         <View style={styles.header}>
-          <Typo style={styles.brand}>keeply.</Typo>
+          <Typo style={styles.brand}>Keeply.</Typo>
           <Typo style={styles.headerText}>Schedule</Typo>
           <Typo style={styles.dateText}>{dateString}</Typo>
         </View>
@@ -720,7 +722,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    paddingHorizontal: 16,
   },
   header: {
     padding: 16,

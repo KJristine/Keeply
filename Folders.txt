@@ -1115,7 +1115,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    paddingHorizontal: 16,
   },
   header: {
     padding: 16,
@@ -1177,8 +1176,8 @@ const styles = StyleSheet.create({
     paddingBottom: 80,
   },
   folderItem: {
-    width: "44%", // Change from fixed width to percentage-based
-    marginHorizontal: "3%", // Use percentage for margins too
+    width: folderWidth,
+    marginHorizontal: 10,
     marginBottom: 20,
     alignItems: "center",
     backgroundColor: "#FFF",
