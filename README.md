@@ -1,50 +1,51 @@
-# Welcome to your Expo app 👋
+# Keeply 📱  
+**Let's Keep it Neatly!**
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Keeply is a mobile-first productivity app designed to help you stay **near, organized, focused, and productive**. Whether you're tracking tasks, managing thoughts, or organizing your day-to-day life, Keeply keeps everything in one neat and accessible place.
 
-## Get started
+Built with **React Native**, powered by **Expo**, and backed by **Firebase**, Keeply ensures a smooth, secure, and responsive experience — anywhere, anytime.
 
-1. Install dependencies
+---
 
-   ```bash
-   npm install
-   ```
+## ✨ Features
 
-2. Start the app
+- ✅ Create, update, and delete tasks, folders, and notes
+- 🧠 Organize your thoughts in structured sections
+- 🔔 Stay focused with minimal and distraction-free UI
+- ☁️ Cloud sync using Firebase Authentication & Firestore Database
+- 📡 API integrations via Axios for cross-platform image handling features
 
-   ```bash
-   npx expo start
-   ```
+---
 
-In the output, you'll find options to open the app in a
+## 📲 Tech Stack
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- **Frontend:** React Native + Expo
+- **Backend:** Firebase (Auth & Firestore)
+- **HTTP Client:** Axios
+- **Build Tools:** Expo CLI
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+---
 
-## Get a fresh project
+## 🛠 Installation
 
-When you're ready, run:
+### 1. Clone the Repository
 
 ```bash
-npm run reset-project
+git clone https://github.com/yourusername/keeply.git
+cd keeply
+
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 2. Install Dependencies
 
-## Learn more
+```bash
+npm install
+# or
+yarn install
 
-To learn more about developing your project with Expo, look at the following resources:
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### 2. Start the Expo Development Server
 
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```bash
+npx expo start
