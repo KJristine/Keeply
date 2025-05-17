@@ -17,7 +17,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
-  Dimensions,
+  Image,
   Modal,
   StyleSheet,
   Text,
@@ -461,31 +461,6 @@ const Home = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Weekly Overview */}
-      <View style={styles.weeklyContainer}>
-        <Text style={styles.weeklyTitle}>This Week</Text>
-        <View style={styles.weeklyChartContainer}>
-          {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map(
-            (day, index) => (
-              <View key={day} style={styles.dayColumn}>
-                <View style={styles.barContainer}>
-                  <View
-                    style={[
-                      styles.dayBar,
-                      {
-                        height:
-                          Math.min(getTasksForWeekday(index) * 15, 100) || 5,
-                      },
-                    ]}
-                  />
-                </View>
-                <Text style={styles.dayLabel}>{day}</Text>
-              </View>
-            )
-          )}
-        </View>
-      </View>
-
       <View style={styles.contentContainer}>
         {/* Search Bar */}
         <View style={styles.searchContainer}>
@@ -603,7 +578,11 @@ const Home = () => {
             disableRightSwipe
             ListEmptyComponent={() => (
               <View style={styles.emptyContainer}>
-                <Ionicons name="list-outline" size={60} color="#E0E0E0" />
+                <Image
+                  source={require("@/assets/images/taskllist.png")}
+                  style={styles.emptyStateImage}
+                  resizeMode="contain"
+                />
                 <Text style={styles.emptyText}>
                   {activeTab === "completed"
                     ? "No completed tasks yet"
@@ -818,50 +797,6 @@ const styles = StyleSheet.create({
     fontFamily: "Nunito_600SemiBold",
     color: "#FFFFFF",
     marginLeft: 6,
-  },
-  // Weekly chart styles
-  weeklyContainer: {
-    marginHorizontal: 16,
-    marginBottom: 16,
-    padding: 16,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 12,
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-  },
-  weeklyTitle: {
-    fontSize: 16,
-    fontFamily: "Nunito_700Bold",
-    color: "#1F2937",
-    marginBottom: 12,
-  },
-  weeklyChartContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-end",
-    height: 120,
-  },
-  dayColumn: {
-    alignItems: "center",
-    width: (Dimensions.get("window").width - 100) / 7,
-  },
-  barContainer: {
-    height: 100,
-    justifyContent: "flex-end",
-  },
-  dayBar: {
-    width: 8,
-    backgroundColor: colors.lightpink,
-    borderRadius: 4,
-  },
-  dayLabel: {
-    fontSize: 12,
-    fontFamily: "Nunito_400Regular",
-    color: "#6B7280",
-    marginTop: 6,
   },
   // Search bar styles
   searchContainer: {
@@ -1183,14 +1118,17 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 60,
+  },
+  emptyStateImage: {
+    width: 200,
+    height: 200,
   },
   emptyText: {
     fontSize: 16,
     color: "#6B7280",
     fontFamily: "Nunito_400Regular",
     textAlign: "center",
-    marginTop: 16,
+
     paddingHorizontal: 20,
   },
 });
