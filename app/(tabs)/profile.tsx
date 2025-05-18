@@ -196,7 +196,7 @@ export default function Profile() {
           // @ts-ignore - TypeScript doesn't recognize append with file params
           formData.append("image", imageObject);
 
-          const IMGBB_API_KEY = "40c0d39660f1471beb29946ab8b5291b";
+          const IMGBB_API_KEY = "";
           console.log("Uploading to ImgBB...");
 
           // Upload to ImgBB with additional error handling
